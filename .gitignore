@@ -1,0 +1,39 @@
+# -----------------------------
+# macOS
+# -----------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# -----------------------------
+# Terraform
+# -----------------------------
+# Ignore local Terraform directory and state files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Ignore variables files (WARNING: You have terraform.tfvars in your tree!
+# If it contains AWS keys or passwords, DO NOT commit it. Rename it to
+# terraform.tfvars.example, commit that, and let git ignore the real one.)
+*.tfvars
+*.tfvars.json
+!terraform.tfvars.example
+
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# -----------------------------
+# Kubernetes & IDEs
+# -----------------------------
+.vscode/
+.idea/
+*.swp
+*.rsa
+*.pem
+kubeconfig*
