@@ -19,3 +19,10 @@ if you really want to spin this up:
 3. go get a coffee.
 
 pls don't break production.
+
+
+
+---
+> see
+
+> ![system architecture diagram](system-architecture.png)
