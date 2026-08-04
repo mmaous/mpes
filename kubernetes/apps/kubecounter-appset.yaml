@@ -5,7 +5,12 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - clusters: {}
+      - list:
+          elements:
+            - clusterName: gke_mmdevops_us-central1_mpes-dev-usc1-gke-primary
+              folderName: cluster-a-usc1
+            - clusterName: gke_mmdevops_europe-west1_mpes-dev-euw1-gke-secondary
+              folderName: cluster-b-euw1
   template:
     metadata:
       name: 'kubecounter-{{name}}'
@@ -13,8 +18,9 @@ spec:
       project: default
       source:
         repoURL: 'https://github.com/mmaous/kubecounter.git'
-        targetRevision: dev
-        path: 'kube'
+        targetRevision: dev # TODO: make it dynamic
+        # Dynamically point to overlays based on cluster
+        path: 'kube/overlays/{{folderName}}'
       destination:
         server: '{{server}}'
         namespace: kubecounter
