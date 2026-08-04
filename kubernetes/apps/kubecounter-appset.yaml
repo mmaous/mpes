@@ -19,8 +19,7 @@ spec:
       source:
         repoURL: 'https://github.com/mmaous/kubecounter.git'
         targetRevision: dev # TODO: make it dynamic
-        # Dynamically point to overlays based on cluster
-        path: 'kube/overlays/cluster-a-usc1'
+        path: 'kube/overlays/dev' # TODO: dynamically point to overlays based on cluster
       destination:
         server: '{{server}}'
         namespace: kubecounter
