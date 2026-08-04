@@ -5,12 +5,7 @@ metadata:
   namespace: argocd
 spec:
   generators:
-      - list:
-          elements:
-            - clusterName: gke_mmdevops_us-central1_mpes-dev-usc1-gke-primary
-              folderName: cluster-a-usc1
-            - clusterName: gke_mmdevops_europe-west1_mpes-dev-euw1-gke-secondary
-              folderName: cluster-b-euw1
+    - cluster: {}
   template:
     metadata:
       name: 'kubecounter-{{name}}'
