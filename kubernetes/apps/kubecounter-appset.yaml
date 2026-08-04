@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kubecounter-fleet
+  namespace: argocd
+spec:
+  generators:
+  - clusters: {}
+  template:
+    metadata:
+      name: 'kubecounter-{{name}}'
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/mmaous/kubecounter.git'
+        targetRevision: dev
+        path: 'kube'
+      destination:
+        server: '{{server}}'
+        namespace: kubecounter
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
