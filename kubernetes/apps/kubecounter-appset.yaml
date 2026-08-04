@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - cluster: {}
+    - clusters: {}
   template:
     metadata:
       name: 'kubecounter-{{name}}'
