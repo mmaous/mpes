@@ -32,8 +32,18 @@ resource "google_container_cluster" "secondary" {
     cluster_secondary_range_name  = "pods"
     services_secondary_range_name = "services"
   }
-
   deletion_protection = false
 
   resource_labels = local.common_labels
+
+  master_authorized_networks_config {
+    cidr_blocks {
+      cidr_block   = "${google_compute_address.nat_primary_ip.address}/32"
+      display_name = "Argo CD NAT IP"
+    }
+    cidr_blocks {
+      cidr_block   = "${chomp(data.http.my_ip.response_body)}/32"
+      display_name = "Terraform Runner IP"
+    }
+  }
 }

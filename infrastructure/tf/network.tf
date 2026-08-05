@@ -2,6 +2,8 @@ resource "google_compute_network" "vpc" {
   name                    = local.vpc_name
   auto_create_subnetworks = false
   routing_mode            = "GLOBAL"
+
+  depends_on = [google_project_service.enabled_apis]
 }
 
 resource "google_compute_subnetwork" "primary" {

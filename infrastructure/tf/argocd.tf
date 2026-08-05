@@ -6,8 +6,6 @@ provider "helm" {
   }
 }
 
-data "google_client_config" "default" {}
-
 # deploy argo
 resource "helm_release" "argocd" {
   name             = "argocd"
