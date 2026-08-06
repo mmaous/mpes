@@ -22,11 +22,23 @@ variable "environment" {
 variable "region_primary" {
   description = "The primary region for cluster A"
   type        = string
-  default     = "us-central1"
+  default     = "us-east1"
 }
 
 variable "region_secondary" {
   description = "The secondary region for cluster B"
   type        = string
   default     = "europe-west1"
+}
+
+variable "primary_zones" {
+  description = "Zones for primary regional cluster's node pool (regional control plane spans these automatically)"
+  type        = list(string)
+  default     = ["us-east1-b", "us-east1-c", "us-east1-d"]
+}
+
+variable "zone_secondary" {
+  description = "Single zone for secondary zonal cluster (closest GKE analog to a single control-plane topology)"
+  type        = string
+  default     = "europe-west1-b"
 }

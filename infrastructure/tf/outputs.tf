@@ -15,5 +15,5 @@ output "connect_to_primary_command" {
 
 output "connect_to_secondary_command" {
   description = "Run this in your terminal to authenticate kubectl to Cluster B"
-  value       = "gcloud container clusters get-credentials ${google_container_cluster.secondary.name} --region ${var.region_secondary} --project ${var.gcp_project_id}"
+  value       = "gcloud container clusters get-credentials ${google_container_cluster.secondary.name} --zone ${var.zone_secondary} --project ${var.gcp_project_id}"
 }
