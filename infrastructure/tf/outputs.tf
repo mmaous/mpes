@@ -17,3 +17,19 @@ output "connect_to_secondary_command" {
   description = "Run this in your terminal to authenticate kubectl to Cluster B"
   value       = "gcloud container clusters get-credentials ${google_container_cluster.secondary.name} --zone ${var.zone_secondary} --project ${var.gcp_project_id}"
 }
+
+output "project_id" {
+  value = google_container_cluster.primary.project
+}
+
+output "primary_location" {
+  value = google_container_cluster.primary.location
+}
+
+output "secondary_location" {
+  value = google_container_cluster.secondary.location
+}
+
+output "secondary_private_endpoint" {
+  value = google_container_cluster.secondary.private_cluster_config[0].private_endpoint
+}

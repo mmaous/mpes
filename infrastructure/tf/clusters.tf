@@ -3,9 +3,9 @@ resource "google_container_cluster" "primary" {
   name     = local.cluster_primary_name
   location = var.region_primary
 
-  node_locations            = var.primary_zones
-  remove_default_node_pool  = true
-  initial_node_count        = 1
+  node_locations           = var.primary_zones
+  remove_default_node_pool = true
+  initial_node_count       = 1
 
   network    = google_compute_network.vpc.id
   subnetwork = google_compute_subnetwork.primary.id
@@ -24,12 +24,15 @@ resource "google_container_cluster" "primary" {
   }
 
 
-  datapath_provider = "ADVANCED_DATAPATH"  # GKE Dataplane V2 — required for NetworkPolicy enforcement
+  datapath_provider = "ADVANCED_DATAPATH" # GKE Dataplane V2 — required for NetworkPolicy enforcement
 
   private_cluster_config {
     enable_private_nodes    = true
-    enable_private_endpoint = false  # keep public endpoint reachable, restricted below
+    enable_private_endpoint = false
     master_ipv4_cidr_block  = "172.16.0.0/28"
+    master_global_access_config {
+      enabled = true
+    }
   }
 
   master_authorized_networks_config {
@@ -52,8 +55,8 @@ resource "google_container_node_pool" "primary_workers" {
   node_locations = var.primary_zones
 
   autoscaling {
-    min_node_count = 1  # × 3 zones = 3 total minimum
-    max_node_count = 2  # × 3 zones = 6 total ceiling
+    min_node_count = 1 # × 3 zones = 3 total minimum
+    max_node_count = 2 # × 3 zones = 6 total ceiling
   }
 
   node_config {
@@ -111,6 +114,9 @@ resource "google_container_cluster" "secondary" {
     enable_private_nodes    = true
     enable_private_endpoint = false
     master_ipv4_cidr_block  = "172.16.0.16/28"
+    master_global_access_config {
+      enabled = true
+    }
   }
 
   master_authorized_networks_config {
