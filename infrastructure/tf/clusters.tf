@@ -128,6 +128,10 @@ resource "google_container_cluster" "secondary" {
       cidr_block   = "${chomp(data.http.my_ip.response_body)}/32"
       display_name = "Terraform Runner IP"
     }
+    cidr_blocks {
+      cidr_block   = google_compute_subnetwork.primary.ip_cidr_range
+      display_name = "Primary Cluster Nodes"
+    }
   }
 
   deletion_protection = false
