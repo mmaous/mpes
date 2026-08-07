@@ -1,13 +1,14 @@
+# CLUSTER A (US-EAST1) - PRIMARY NETWORK
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-base
+  name: istio-base-us
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://istio-release.storage.googleapis.com/charts'
-    targetRevision: 1.30.0
+    targetRevision: 1.30.3
     chart: base
   destination:
     server: 'https://kubernetes.default.svc'
@@ -16,21 +17,26 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
 
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istiod
+  name: istiod-us
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://istio-release.storage.googleapis.com/charts'
-    targetRevision: 1.30.0
+    targetRevision: 1.30.3
     chart: istiod
+    helm:
+      values: |
+        global:
+          meshID: mpes-mesh
+          multiCluster:
+            clusterName: cluster-a
+          network: network-a
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: istio-system
@@ -38,27 +44,51 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
 
+# CLUSTER B (EUROPE-WEST1) - SECONDARY NETWORK
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-ingress
+  name: istio-base-eu
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://istio-release.storage.googleapis.com/charts'
-    targetRevision: 1.30.0
-    chart: gateway
+    targetRevision: 1.30.3
+    chart: base
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: istio-ingress
+    name: cluster-b
+    namespace: istio-system
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istiod-eu
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://istio-release.storage.googleapis.com/charts'
+    targetRevision: 1.30.3
+    chart: istiod
+    helm:
+      values: |
+        global:
+          meshID: mpes-mesh
+          multiCluster:
+            clusterName: cluster-b
+          network: network-b
+  destination:
+    name: cluster-b
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
