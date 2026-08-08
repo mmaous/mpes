@@ -23,7 +23,7 @@ spec:
           - --issuer-ambient-credentials
         serviceAccount:
           annotations:
-            iam.gke.io/gcp-service-account: "external-secrets-operator@mmdevops.iam.gserviceaccount.com"
+            iam.gke.io/gcp-service-account: "mpes-dev-cert-manager-dns@mmdevops.iam.gserviceaccount.com"
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: cert-manager

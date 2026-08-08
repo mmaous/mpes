@@ -37,3 +37,11 @@ output "secondary_private_endpoint" {
 output "eso_gsa_email" {
   value = google_service_account.eso_gsa.email
 }
+
+output "gateway_static_ip" {
+  value = google_compute_address.gateway_ip.address
+}
+
+output "cert_manager_dns_sa_email" {
+  value = google_service_account.cert_manager_dns.email
+}
