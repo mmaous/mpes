@@ -41,8 +41,21 @@ if [ -z "$SECRET_NAME" ]; then
     kubectl config set-context "$CTX_PRIMARY" --namespace=argocd >/dev/null
     kubectl config use-context "$CTX_PRIMARY" >/dev/null
 
-    # Use context pointing to the secondary cluster, allowing insecure skip for the IP/cert mismatch
-    argocd --insecure cluster add "$CTX_SECONDARY" --yes --core --name cluster-b
+    # NOTE: This step (argocd cluster add) creates a service account directly against
+    # the secondary cluster's private control-plane endpoint (172.16.0.x). Since that
+    # endpoint is only reachable from inside the VPC, this script must be run from a
+    # machine with VPC-internal network access — not from an external laptop/workstation.
+    #
+    # Options to satisfy this requirement:
+    #   1. Run from a temporary Compute Engine VM inside the VPC (--tunnel-through-iap)
+    #   2. Run from a permanent bastion host (see architecture notes)
+    #   3. Temporarily flip enable_private_endpoint=false to allow external registration
+    #      (not recommended long-term — reintroduces public control-plane exposure)
+    #
+    # This is a deliberate architectural tradeoff: keeping the control plane private
+    # means cluster registration is an infra-adjacent operational step, not something
+    # this script can fully automate from an arbitrary machine.
+    argocd cluster add "$CTX_SECONDARY" --yes --core --name cluster-b
 
     SECRET_NAME=$(kubectl --context "$CTX_PRIMARY" -n argocd get secret -l argocd.argoproj.io/secret-type=cluster -o name | grep -v 'in-cluster' || true)
 else
