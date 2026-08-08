@@ -1,0 +1,60 @@
+# US CLUSTER - EXTERNAL SECRETS OPERATOR
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: eso-us
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://charts.external-secrets.io'
+    targetRevision: 2.9.0
+    chart: external-secrets
+    helm:
+      values: |
+        installCRDs: true
+        serviceAccount:
+          create: true
+          name: external-secrets
+          annotations:
+            iam.gke.io/gcp-service-account: "external-secrets-operator@mmdevops.iam.gserviceaccount.com"
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: external-secrets
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+# EU CLUSTER - EXTERNAL SECRETS OPERATOR
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: eso-eu
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://charts.external-secrets.io'
+    targetRevision: 2.9.0
+    chart: external-secrets
+    helm:
+      values: |
+        installCRDs: true
+        serviceAccount:
+          create: true
+          name: external-secrets
+          annotations:
+            iam.gke.io/gcp-service-account: "external-secrets-operator@mmdevops.iam.gserviceaccount.com"
+  destination:
+    name: cluster-b
+    namespace: external-secrets
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
