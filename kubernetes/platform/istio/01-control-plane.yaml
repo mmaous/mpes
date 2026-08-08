@@ -1,9 +1,10 @@
-# CLUSTER A (US-EAST1) - PRIMARY NETWORK
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: istio-base-us
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
   project: default
   source:
@@ -24,6 +25,8 @@ kind: Application
 metadata:
   name: istiod-us
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   project: default
   source:
@@ -45,13 +48,14 @@ spec:
       prune: true
       selfHeal: true
 
-# CLUSTER B (EUROPE-WEST1) - SECONDARY NETWORK
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: istio-base-eu
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
   project: default
   source:
@@ -72,6 +76,8 @@ kind: Application
 metadata:
   name: istiod-eu
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   project: default
   source:

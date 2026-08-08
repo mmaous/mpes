@@ -1,17 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-secrets-us
+  name: gateway-api-crds-us
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/mmaous/mpes.git'
-    targetRevision: main
-    path: kubernetes/platform/istio/secrets-us
+    repoURL: 'https://github.com/kubernetes-sigs/gateway-api'
+    targetRevision: v1.1.0
+    path: config/crd
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: istio-system
   syncPolicy:
     automated:
       prune: true
@@ -21,17 +22,18 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-secrets-eu
+  name: gateway-api-crds-eu
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/mmaous/mpes.git'
-    targetRevision: main
-    path: kubernetes/platform/istio/secrets-eu
+    repoURL: 'https://github.com/kubernetes-sigs/gateway-api'
+    targetRevision: v1.1.0
+    path: config/crd
   destination:
     name: cluster-b
-    namespace: istio-system
   syncPolicy:
     automated:
       prune: true
