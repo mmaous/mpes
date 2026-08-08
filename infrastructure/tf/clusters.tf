@@ -146,8 +146,8 @@ resource "google_container_node_pool" "secondary_workers" {
   location = var.zone_secondary
 
   autoscaling {
-    min_node_count = 2
-    max_node_count = 4
+    min_node_count = 1
+    max_node_count = 6
   }
 
   node_config {
