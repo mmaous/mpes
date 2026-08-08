@@ -4,7 +4,8 @@ locals {
     "container.googleapis.com",
     "gkehub.googleapis.com",
     "anthos.googleapis.com",
-    "mesh.googleapis.com"
+    "mesh.googleapis.com",
+    "secretmanager.googleapis.com"
   ]
 }
 

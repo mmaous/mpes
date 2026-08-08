@@ -33,3 +33,7 @@ output "secondary_location" {
 output "secondary_private_endpoint" {
   value = google_container_cluster.secondary.private_cluster_config[0].private_endpoint
 }
+
+output "eso_gsa_email" {
+  value = google_service_account.eso_gsa.email
+}
