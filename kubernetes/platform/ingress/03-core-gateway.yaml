@@ -1,16 +1,22 @@
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: mpes-gateway
-  namespace: istio-system
+  name: core-gateway
+  namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  gatewayClassName: istio
-  listeners:
-  - name: http
-    protocol: HTTP
-    port: 80
-    allowedRoutes:
-      namespaces:
-        from: All
+  project: default
+  source:
+    repoURL: 'https://github.com/mmaous/mpes.git'
+    targetRevision: main
+    path: kubernetes/platform/ingress/core-gateway
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - SkipDryRunOnMissingResource=true
