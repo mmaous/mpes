@@ -3,6 +3,8 @@ kind: Gateway
 metadata:
   name: mpes-gateway
   namespace: istio-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   gatewayClassName: istio
   listeners:
@@ -12,3 +14,14 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: "*.mmlabs.me"
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - name: mmlabs-wildcard-tls

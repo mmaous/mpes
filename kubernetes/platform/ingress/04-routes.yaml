@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-issuer
+  name: ingress-routes
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   source:
     repoURL: 'https://github.com/mmaous/mpes.git'
     targetRevision: main
-    path: kubernetes/platform/ingress/cluster-issuer
+    path: kubernetes/platform/ingress/routes
   destination:
     server: 'https://kubernetes.default.svc'
   syncPolicy:
