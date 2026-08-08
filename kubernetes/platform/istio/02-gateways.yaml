@@ -1,0 +1,74 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-eastwest-us
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://istio-release.storage.googleapis.com/charts'
+    targetRevision: 1.30.3
+    chart: gateway
+    helm:
+      values: |
+        labels:
+          istio: eastwestgateway
+          app: istio-eastwestgateway
+          topology.istio.io/network: network-a
+        service:
+          type: LoadBalancer
+          ports:
+          - name: status-port
+            port: 15021
+            targetPort: 15021
+          - name: mtls
+            port: 15443
+            targetPort: 15443
+          - name: tcp-dns
+            port: 53
+            targetPort: 53
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-eastwest-eu
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://istio-release.storage.googleapis.com/charts'
+    targetRevision: 1.30.3
+    chart: gateway
+    helm:
+      values: |
+        labels:
+          istio: eastwestgateway
+          app: istio-eastwestgateway
+          topology.istio.io/network: network-b
+        service:
+          type: LoadBalancer
+          ports:
+          - name: status-port
+            port: 15021
+            targetPort: 15021
+          - name: mtls
+            port: 15443
+            targetPort: 15443
+          - name: tcp-dns
+            port: 53
+            targetPort: 53
+  destination:
+    name: cluster-b
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
