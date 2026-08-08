@@ -4,9 +4,9 @@ set -e
 # Auto-resolve paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TF_DIR="$SCRIPT_DIR/../tf"
-REPO_ROOT="$SCRIPT_DIR/../."
+REPO_ROOT="$SCRIPT_DIR/../.."
 
-echo "Reading Terraform outputs from $TF_DIR.."
+echo "Reading Terraform outputs from $TF_DIR ..."
 cd "$TF_DIR" || { echo "Failed to cd to $TF_DIR"; exit 1; }
 
 PROJECT=$(terraform output -raw project_id)
@@ -42,7 +42,7 @@ if [ -z "$SECRET_NAME" ]; then
     kubectl config use-context "$CTX_PRIMARY" >/dev/null
 
     # Use context pointing to the secondary cluster, allowing insecure skip for the IP/cert mismatch
-    argocd --insecure cluster add "$CTX_SECONDARY" --yes
+    argocd --insecure cluster add "$CTX_SECONDARY" --yes --core --name cluster-b
 
     SECRET_NAME=$(kubectl --context "$CTX_PRIMARY" -n argocd get secret -l argocd.argoproj.io/secret-type=cluster -o name | grep -v 'in-cluster' || true)
 else

@@ -3,16 +3,25 @@ kind: Application
 metadata:
   name: argocd
   namespace: argocd
+
 spec:
   project: default
-  source:
-    repoURL: https://github.com/mmaous/mpes
-    path: kubernetes/platform/argocd
-    targetRevision: main
-    helm:
-      valueFiles: [values.yaml]
+
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argo-cd
+      targetRevision: 10.3.0
+      helm:
+        valueFiles:
+          - $values/kubernetes/platform/argocd/values.yaml
+
+    - repoURL: https://github.com/mmaous/mpes
+      targetRevision: main
+      ref: values
+
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
+
   syncPolicy:
     automated: {}
