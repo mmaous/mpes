@@ -27,6 +27,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
 
 ---
 # EU CLUSTER - EXTERNAL SECRETS OPERATOR
@@ -58,3 +59,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
