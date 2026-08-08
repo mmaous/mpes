@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-us
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
+    targetRevision: 88.2.0
+    chart: prometheus
+    helm:
+      values: |
+        server:
+          global:
+            scrape_interval: 15s
+        alertmanager:
+          enabled: false
+        pushgateway:
+          enabled: false
+        nodeExporter:
+          enabled: false
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-eu
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
+    targetRevision: 88.2.0
+    chart: prometheus
+    helm:
+      values: |
+        server:
+          global:
+            scrape_interval: 15s
+        alertmanager:
+          enabled: false
+        pushgateway:
+          enabled: false
+        nodeExporter:
+          enabled: false
+  destination:
+    name: cluster-b
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

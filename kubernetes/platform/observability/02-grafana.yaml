@@ -1,0 +1,76 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-us
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://grafana.github.io/helm-charts'
+    targetRevision: 12.8.0
+    chart: grafana
+    helm:
+      values: |
+        adminUser: admin
+        adminPassword: password
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+            - name: Prometheus
+              type: prometheus
+              url: http://prometheus-server.istio-system.svc.cluster.local
+              access: proxy
+              isDefault: true
+        dashboardProviders:
+          dashboardproviders.yaml:
+            apiVersion: 1
+            providers:
+            - name: 'istio-dashboards'
+              orgId: 1
+              folder: 'Istio'
+              type: file
+              disableDeletion: false
+              editable: true
+              options:
+                path: /var/lib/grafana/dashboards/istio-dashboards
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-eu
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://grafana.github.io/helm-charts'
+    targetRevision: 12.8.0
+    chart: grafana
+    helm:
+      values: |
+        adminUser: admin
+        adminPassword: password
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+            - name: Prometheus
+              type: prometheus
+              url: http://prometheus-server.istio-system.svc.cluster.local
+              access: proxy
+              isDefault: true
+  destination:
+    name: cluster-b
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
