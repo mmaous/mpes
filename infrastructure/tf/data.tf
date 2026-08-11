@@ -9,5 +9,5 @@ data "google_dns_managed_zone" "mmlabs" {
 }
 
 locals {
-  app_subdomains = ["kubecounter"]
+  app_subdomains = ["kubecounter", "argocd"]
 }
