@@ -57,7 +57,7 @@ up: tf-apply credentials argocd-setup bootstrap-all
 	@echo -e "$(GREEN)[SUCCESS] Full MPES platform up and bootstrapped!$(RESET)"
 
 ## Gracefully destroy full platform: Teardown Argo CD & GitOps workloads first, then destroy Terraform infrastructure
-down: argocd-teardown tf-destroy
+down: tf-destroy
 	@echo -e "$(GREEN)[SUCCESS] Full MPES platform torn down cleanly.$(RESET)"
 
 ## Show operational status of GCP infrastructure, GKE clusters, and Argo CD workloads
