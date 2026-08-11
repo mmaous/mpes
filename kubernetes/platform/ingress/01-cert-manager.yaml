@@ -13,7 +13,8 @@ spec:
     chart: cert-manager
     helm:
       values: |
-        installCRDs: true
+        crds:
+          enabled: true
         crds:
           enabled: true
         config:
