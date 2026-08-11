@@ -9,7 +9,9 @@ spec:
         repoURL: 'https://github.com/mmaous/mpes.git'
         revision: main
         directories:
-          - path: kubernetes/platform/*
+          - path: 'kubernetes/platform/*'
+          - path: 'kubernetes/platform/*/*'
+            exclude: true
   template:
     metadata:
       name: 'platform-{{path.basename}}'
