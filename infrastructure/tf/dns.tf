@@ -19,3 +19,14 @@ resource "google_service_account_iam_member" "cert_manager_wi_binding" {
   role                = "roles/iam.workloadIdentityUser"
   member              = "serviceAccount:${var.gcp_project_id}.svc.id.goog[cert-manager/cert-manager]"
 }
+
+
+resource "google_dns_record_set" "app_records" {
+  for_each = toset(local.app_subdomains)
+
+  name         = "${each.value}.mmlabs.me."
+  type         = "A"
+  ttl          = 300
+  managed_zone = data.google_dns_managed_zone.mmlabs.name
+  rrdatas      = [google_compute_address.gateway_ip.address]
+}

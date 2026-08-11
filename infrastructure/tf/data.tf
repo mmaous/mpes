@@ -7,3 +7,7 @@ data "http" "my_ip" {
 data "google_dns_managed_zone" "mmlabs" {
   name = "labs"
 }
+
+locals {
+  app_subdomains = ["kubecounter"]
+}
