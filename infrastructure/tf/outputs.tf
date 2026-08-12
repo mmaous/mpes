@@ -45,3 +45,8 @@ output "gateway_static_ip" {
 output "cert_manager_dns_sa_email" {
   value = google_service_account.cert_manager_dns.email
 }
+
+output "nat_primary_ip" {
+  value = google_compute_address.nat_primary_ip.address
+}
+
